@@ -14,6 +14,7 @@ import {
   type RecommendationResult,
 } from "./engine";
 import "./styles.css";
+import "./visual-refresh.css";
 
 type Screen = "home" | "question" | "analysis" | "result";
 type AppRoute = { screen: "question"; index: number } | { screen: Exclude<Screen, "question"> };
@@ -116,13 +117,51 @@ function icon(name: string, extra = ""): string {
 function globe(smile: number, large = false): string {
   const mouth = smile > 65 ? "M72 88c7 10 19 10 26 0" : smile < 40 ? "M74 94c6-7 16-7 22 0" : "M73 91h24";
   return `<svg class="earth ${large ? "earth-large" : ""}" viewBox="0 0 180 180" role="img" aria-label="Planeta Tierra animado y amigable">
-    <defs><radialGradient id="earthSkin" cx="35%" cy="28%"><stop stop-color="#9bf76d"/><stop offset="1" stop-color="#28c58b"/></radialGradient><clipPath id="earthClip"><circle cx="90" cy="90" r="71"/></clipPath></defs>
-    <circle cx="90" cy="90" r="79" fill="#f2cf61" opacity=".13"/><circle cx="90" cy="90" r="71" fill="url(#earthSkin)" stroke="#d4ffe7" stroke-width="3"/>
-    <g clip-path="url(#earthClip)" fill="#087d7d"><path d="M32 50 48 38l18 3 6 12-8 8-3 15-12 8-13-9-8-16Zm69-17 20 2 13 14-9 8-10-4-6 9-15-3-9-10 4-12Zm-32 55 12-4 16 5 3 13 13 6 5 17-11 17-10 12-11-11 3-15-13-9-8-17Zm58-7 16-8 12 10-5 18-14 5-9-11Z"/></g>
-    <circle cx="70" cy="78" r="4" fill="#082f38"/><circle cx="108" cy="78" r="4" fill="#082f38"/><path d="${mouth}" fill="none" stroke="#082f38" stroke-width="4" stroke-linecap="round"/>
-    <circle cx="59" cy="88" r="6" fill="#ff9675" opacity=".8"/><circle cx="120" cy="88" r="6" fill="#ff9675" opacity=".8"/>
-    <path d="M22 44 30 34m120 97 9 5" stroke="#f6df8c" stroke-width="3" stroke-linecap="round"/>
+    <defs><radialGradient id="earthSkin" cx="35%" cy="28%"><stop stop-color="#FBF4DC"/><stop offset="1" stop-color="#6EDDA6"/></radialGradient><clipPath id="earthClip"><circle cx="90" cy="90" r="71"/></clipPath></defs>
+    <circle cx="90" cy="90" r="79" fill="#F5B93F" opacity=".28"/><circle cx="90" cy="90" r="71" fill="url(#earthSkin)" stroke="#FBF4DC" stroke-width="3"/>
+    <g clip-path="url(#earthClip)" fill="#2B7A8F"><path d="M32 50 48 38l18 3 6 12-8 8-3 15-12 8-13-9-8-16Zm69-17 20 2 13 14-9 8-10-4-6 9-15-3-9-10 4-12Zm-32 55 12-4 16 5 3 13 13 6 5 17-11 17-10 12-11-11 3-15-13-9-8-17Zm58-7 16-8 12 10-5 18-14 5-9-11Z"/></g>
+    <circle cx="70" cy="78" r="4" fill="#14211F"/><circle cx="108" cy="78" r="4" fill="#14211F"/><path d="${mouth}" fill="none" stroke="#14211F" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="59" cy="88" r="6" fill="#F4735B"/><circle cx="120" cy="88" r="6" fill="#F4735B"/>
+    <path d="M22 44 30 34m120 97 9 5" stroke="#F5B93F" stroke-width="3" stroke-linecap="round"/>
   </svg>`;
+}
+
+function optionIllustration(area: Area, index: number): string {
+  const accent = ["#F4735B", "#8C9BE8", "#F5B93F", "#6EDDA6"][index];
+  const common = `<path d="M9 88h102" stroke="#14211F" stroke-width="3" stroke-linecap="round"/><ellipse cx="61" cy="91" rx="34" ry="4" fill="#14211F" opacity=".12"/>`;
+  const characters: Record<Area, string[]> = {
+    transporte: [
+      `<circle cx="36" cy="39" r="10" fill="#F5B93F"/><path d="m36 50-8 19m8-18 14 12 11-2m-25-10 13 8m-13 10-10 12m10-12 12 11" fill="none" stroke="#14211F" stroke-width="5" stroke-linecap="round"/><circle cx="26" cy="81" r="11" fill="#6EDDA6" stroke="#14211F" stroke-width="2"/><circle cx="62" cy="81" r="11" fill="#6EDDA6" stroke="#14211F" stroke-width="2"/><path d="m27 81 12-19 13 19H27l5-9h15" fill="none" stroke="#14211F" stroke-width="2.3"/>`,
+      `<rect x="23" y="25" width="58" height="49" rx="13" fill="#F5B93F" stroke="#14211F" stroke-width="2"/><path d="M32 34h39v19H32z" fill="#FBF4DC"/><circle cx="36" cy="65" r="5" fill="#14211F"/><circle cx="67" cy="65" r="5" fill="#14211F"/><circle cx="41" cy="44" r="3" fill="#14211F"/><circle cx="62" cy="44" r="3" fill="#14211F"/><path d="M47 48q5 5 10 0" fill="none" stroke="#14211F" stroke-width="2"/>`,
+      `<circle cx="40" cy="35" r="9" fill="#F4735B"/><circle cx="65" cy="38" r="9" fill="#8C9BE8"/><path d="M40 46v28m25-19-10 21m-15-30 14 11 12-4m-26 0-12 17m12-3-9 16m19-7 11 7" fill="none" stroke="#14211F" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="81" r="9" fill="#F5B93F" stroke="#14211F" stroke-width="2"/><circle cx="68" cy="81" r="9" fill="#6EDDA6" stroke="#14211F" stroke-width="2"/>`,
+      `<path d="M19 60h12l7-20h42l11 20v17H19z" fill="#F4735B" stroke="#14211F" stroke-width="2" stroke-linejoin="round"/><path d="M42 44h14v14H36zm18 0h15l8 14H60z" fill="#FBF4DC"/><circle cx="35" cy="76" r="7" fill="#14211F"/><circle cx="77" cy="76" r="7" fill="#14211F"/>`,
+    ],
+    agua: [
+      `<path d="M56 20S31 48 31 62a25 25 0 0 0 50 0c0-14-25-42-25-42Z" fill="#8C9BE8" stroke="#14211F" stroke-width="2"/><circle cx="48" cy="57" r="3" fill="#14211F"/><circle cx="65" cy="57" r="3" fill="#14211F"/><path d="M48 68q8 8 17 0" fill="none" stroke="#14211F" stroke-width="2.5" stroke-linecap="round"/>`,
+      `<circle cx="53" cy="31" r="11" fill="#F5B93F"/><path d="M53 43v29m0-17-17 11m17-11 17 11m-17 6-12 13m12-13 12 13" fill="none" stroke="#14211F" stroke-width="5" stroke-linecap="round"/><path d="M29 41q-8 8 0 13m-7-19q-13 13 0 26m61-20q8 8 0 13" fill="none" stroke="#8C9BE8" stroke-width="3" stroke-linecap="round"/>`,
+      `<path d="M36 70q-1-27 20-36 21 9 20 36" fill="#6EDDA6" stroke="#14211F" stroke-width="2"/><path d="M56 35V20m0 17L43 26m13 14 14-15" stroke="#14211F" stroke-width="2.5" stroke-linecap="round"/><path d="M52 60c-4 5-5 8-5 10a7 7 0 0 0 14 0c0-2-2-6-5-10" fill="#8C9BE8"/><circle cx="49" cy="48" r="2" fill="#14211F"/><circle cx="64" cy="48" r="2" fill="#14211F"/><path d="M51 55q5 4 10 0" fill="none" stroke="#14211F" stroke-width="2"/>`,
+      `<path d="M30 38h38v9H30zm9 9v-9m20 9v-9" stroke="#14211F" stroke-width="4" stroke-linecap="round"/><path d="M68 43h13q10 0 10 9v8H68z" fill="#F5B93F" stroke="#14211F" stroke-width="2"/><path d="M82 60c-5 7-5 10 0 13 5-3 5-6 0-13Z" fill="#8C9BE8"/>`,
+    ],
+    residuos: [
+      `<path d="m54 26 9 14-11 1m11-1 9-13m-9 13 9 1m4 16-16 4 5 10m-5-10 2-9m-2 9-5 8M39 55l-1 17-11-4m11 4 8 6m-8-6-10-2" fill="none" stroke="#6EDDA6" stroke-width="5" stroke-linejoin="round"/><circle cx="55" cy="47" r="13" fill="#8C9BE8" stroke="#14211F" stroke-width="2"/><circle cx="51" cy="46" r="2" fill="#14211F"/><circle cx="59" cy="46" r="2" fill="#14211F"/><path d="M51 52q4 4 8 0" fill="none" stroke="#14211F" stroke-width="2"/>`,
+      `<path d="M30 36h51v39H30z" fill="#F5B93F" stroke="#14211F" stroke-width="2"/><path d="m30 46 25 14 26-14M55 60v15" fill="none" stroke="#14211F" stroke-width="2"/><circle cx="46" cy="52" r="2" fill="#14211F"/><circle cx="63" cy="52" r="2" fill="#14211F"/><path d="M47 62q7 6 14 0" fill="none" stroke="#14211F" stroke-width="2"/>`,
+      `<path d="M24 47h24v29H24zm31 0h24v29H55zm-16-14h24v29H39z" fill="#6EDDA6" stroke="#14211F" stroke-width="2"/><path d="m46 40 5 8h-10zM32 54v13m31-13v13" stroke="#14211F" stroke-width="2" stroke-linecap="round"/><circle cx="35" cy="55" r="2" fill="#14211F"/><circle cx="66" cy="55" r="2" fill="#14211F"/>`,
+      `<path d="M35 39h40l-4 39H39z" fill="#F4735B" stroke="#14211F" stroke-width="2"/><path d="M30 34h50m-31 0v-5h12v5" stroke="#14211F" stroke-width="3" stroke-linecap="round"/><circle cx="49" cy="54" r="2.5" fill="#14211F"/><circle cx="62" cy="54" r="2.5" fill="#14211F"/><path d="M50 64q6 5 12 0" fill="none" stroke="#14211F" stroke-width="2"/>`,
+    ],
+    plásticos: [
+      `<path d="M34 40h45l-4 39H38z" fill="#F4735B" stroke="#14211F" stroke-width="2"/><path d="M45 40q0-14 12-14t12 14m-16 16q7-8 14 0m-7-11v20" fill="none" stroke="#14211F" stroke-width="2.5"/><circle cx="49" cy="53" r="2" fill="#14211F"/><circle cx="65" cy="53" r="2" fill="#14211F"/>`,
+      `<path d="M48 25h16v11l8 8v34H40V44l8-8z" fill="#8C9BE8" stroke="#14211F" stroke-width="2"/><path d="M48 35h16m-16 25h16" stroke="#14211F" stroke-width="2"/><circle cx="51" cy="51" r="2" fill="#14211F"/><circle cx="61" cy="51" r="2" fill="#14211F"/><path d="M52 56q4 4 8 0" fill="none" stroke="#14211F" stroke-width="2"/>`,
+      `<path d="M70 28C50 28 35 36 35 52a17 17 0 0 0 17 17c17 0 25-16 18-41Z" fill="#6EDDA6" stroke="#14211F" stroke-width="2"/><path d="M30 80c14-20 26-31 39-38" fill="none" stroke="#14211F" stroke-width="2"/><circle cx="49" cy="51" r="2" fill="#14211F"/><circle cx="62" cy="51" r="2" fill="#14211F"/><path d="M51 58q5 5 10 0" fill="none" stroke="#14211F" stroke-width="2"/>`,
+      `<path d="M43 24h21l3 10-3 6 10 13v25H35V53l10-13-4-6z" fill="#F5B93F" stroke="#14211F" stroke-width="2"/><path d="M44 34h20m-18 27h18" stroke="#14211F" stroke-width="2"/><circle cx="49" cy="51" r="2" fill="#14211F"/><circle cx="61" cy="51" r="2" fill="#14211F"/><path d="M50 56q5 5 10 0" fill="none" stroke="#14211F" stroke-width="2"/>`,
+    ],
+    energía: [
+      `<circle cx="55" cy="51" r="24" fill="#F5B93F" stroke="#14211F" stroke-width="2"/><path d="M55 17v-8m0 84v-8M21 51h-8m84 0h-8M31 27l-6-6m60 60-6-6m0-48 6-6m-60 60 6-6" stroke="#14211F" stroke-width="3" stroke-linecap="round"/><circle cx="47" cy="48" r="2" fill="#14211F"/><circle cx="63" cy="48" r="2" fill="#14211F"/><path d="M47 59q8 7 16 0" fill="none" stroke="#14211F" stroke-width="2"/>`,
+      `<path d="M43 69h25m-22 7h19m-15 7h11m-7-14q0-8 8-15 7-8 7-17a20 20 0 1 0-40 0q0 9 8 18 6 6 6 14" fill="#F5B93F" stroke="#14211F" stroke-width="2"/><circle cx="46" cy="42" r="2" fill="#14211F"/><circle cx="60" cy="42" r="2" fill="#14211F"/><path d="M47 49q6 5 12 0" fill="none" stroke="#14211F" stroke-width="2"/>`,
+      `<rect x="27" y="37" width="58" height="35" rx="17" fill="#6EDDA6" stroke="#14211F" stroke-width="2"/><circle cx="66" cy="54" r="13" fill="#F5B93F" stroke="#14211F" stroke-width="2"/><circle cx="43" cy="49" r="2" fill="#14211F"/><circle cx="52" cy="49" r="2" fill="#14211F"/><path d="M43 56q5 4 10 0" fill="none" stroke="#14211F" stroke-width="2"/>`,
+      `<path d="M43 26h12v28q0 13 13 13t13-13V39" fill="none" stroke="#14211F" stroke-width="5" stroke-linecap="round"/><path d="M38 22h22v16H38zm37 12h13v12H75z" fill="#8C9BE8" stroke="#14211F" stroke-width="2"/><circle cx="47" cy="29" r="2" fill="#14211F"/><circle cx="52" cy="29" r="2" fill="#14211F"/><path d="m45 34 5 3 5-3" fill="none" stroke="#14211F" stroke-width="1.5"/>`,
+    ],
+  };
+  return `<svg class="option-illustration" viewBox="0 0 120 100" aria-hidden="true"><ellipse cx="59" cy="86" rx="18" ry="3" fill="${accent}" opacity=".55"/>${characters[area][index]}${common}</svg>`;
 }
 
 function sparkles(): string {
@@ -180,7 +219,7 @@ function questionScreen(index: number): string {
   return `<main class="screen quiz-screen">${sparkles()}${header()}
     <div class="quiz-progress">
       <button class="back-button" data-action="back" aria-label="${index === 0 ? "Volver al inicio" : "Pregunta anterior"}">${icon("arrow")} <span>ATRÁS</span></button>
-      <div class="progress-center"><span class="progress-label">TU HUELLA EN CONSTRUCCIÓN</span><div class="progress-track" role="progressbar" aria-label="Progreso de preguntas" aria-valuenow="${index + 1}" aria-valuemin="1" aria-valuemax="5"><i style="width:${((index + 1) / 5) * 100}%"></i></div><span class="progress-count">0${index + 1}<small> / 05</small></span></div>
+      <div class="progress-center"><span class="progress-label">PREGUNTA 0${index + 1} DE 05</span><div class="progress-track" role="progressbar" aria-label="Progreso de preguntas" aria-valuenow="${index + 1}" aria-valuemin="1" aria-valuemax="5"><i style="width:${((index + 1) / 5) * 100}%"></i></div><span class="progress-count">0${index + 1}<small> / 05</small></span></div>
       <span class="step-number">PASO 0${index + 1}</span>
     </div>
     <section class="question-stage" aria-labelledby="question-title">
@@ -188,7 +227,7 @@ function questionScreen(index: number): string {
       <div class="question-planet">${globe(mood)}<span class="planet-glimmer"></span><span class="planet-note">${selected >= 80 ? "¡SE NOTA!" : selected <= 35 ? "TODO PASO CUENTA" : "SIN JUICIOS, SOLO IDEAS"}</span></div>
       <div class="options-grid" role="group" aria-label="Opciones para ${question.area}">
         ${question.options.map((option, optionIndex) => `<button class="answer-card ${selected === option.score ? "is-selected" : ""}" data-action="answer" data-value="${option.score}" aria-pressed="${selected === option.score}">
-          <span class="answer-icon answer-icon-${optionIndex}">${icon(option.icon)}</span><span class="answer-copy"><strong>${option.label}</strong><small>${option.detail}</small></span><span class="answer-check">${icon("check")}</span>
+          <span class="illustration-wrap">${optionIllustration(question.area, optionIndex)}</span><span class="answer-copy"><strong>${option.label}</strong><small>${option.detail}</small><i class="answer-underline"></i></span><span class="answer-check">${icon("check")}</span>
         </button>`).join("")}
       </div>
     </section>
@@ -215,11 +254,11 @@ function cityIllustration(focus: Area): string {
       ? '<g class="city-focus"><path d="M147 128h70" stroke="#b9f275" stroke-width="3" stroke-dasharray="5 5"/><path d="M159 119h34a4 4 0 0 1 4 4v8h-42v-8a4 4 0 0 1 4-4Z" fill="#ff956e"/><circle cx="162" cy="133" r="3" fill="#f5dc83"/><circle cx="190" cy="133" r="3" fill="#f5dc83"/><path d="M164 120v7m14-7v7m-12-7h11" stroke="#f4ffe4" stroke-width="1.5"/></g>'
       : '<g class="city-focus"><path d="M193 117c-1-13 7-19 16-21-1 13-7 19-16 21Zm0 0c0-11-5-16-12-18 0 10 4 16 12 18Z" fill="#a3ed65"/><path d="M193 117v13m37-24c-1-12 7-18 15-20-1 12-6 18-15 20Zm0 0c0-10-5-15-12-17 0 10 4 15 12 17Z" fill="#a3ed65"/><path d="M230 106v24" stroke="#9fc883" stroke-width="2"/></g>';
   return `<svg class="future-city" viewBox="0 0 300 168" role="img" aria-label="Ciudad futura sostenible con énfasis en ${focus}">
-    <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#174858"/><stop offset="1" stop-color="#0b333d"/></linearGradient></defs>
-    <path d="M0 0h300v168H0z" fill="url(#sky)"/><circle cx="241" cy="34" r="17" fill="#f4dc83" opacity=".82"/><path d="M0 105 39 72l33 31 35-52 48 56 38-38 48 40 24-27 35 32v54H0Z" fill="#1c5a5e" opacity=".55"/>
-    <g class="city-silhouette" fill="#617978"><path d="M13 103h30v55H13zm36-25h33v80H49zm39 16h27v64H88zm36-35h36v99h-36zm42 40h26v59h-26zm32-15h30v74h-30zm36 21h29v53h-29zm36-10h20v63h-20zm27 14h21v49h-21z"/></g>
-    <g class="city-windows" fill="#f4d77a"><path d="M57 88h6v7h-6zm13 0h6v7h-6zm-13 14h6v7h-6zm13 0h6v7h-6zm-13 14h6v7h-6zm13 0h6v7h-6zm70-29h6v7h-6zm13 0h6v7h-6zm-13 14h6v7h-6zm13 0h6v7h-6zm-13 15h6v7h-6zm48-3h6v7h-6zm14 0h6v7h-6z"/></g>
-    <path d="M0 148q39-13 76 0t75 0 75 0 74 0v20H0Z" fill="#184e50"/><g class="city-green"><path d="M8 135c-2-11 4-17 11-19-1 11-4 16-11 19Zm0 0c0-9-4-13-10-15 0 8 3 13 10 15Zm22 5c-1-12 5-18 12-19-1 11-5 16-12 19Zm0 0c0-9-4-13-10-15 0 8 3 13 10 15Z" fill="#a3ed65"/><path d="M8 134v15m22-10v10" stroke="#c6b47c" stroke-width="1.5"/></g>
+    <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#3A93A6"/><stop offset="1" stop-color="#2B7A8F"/></linearGradient></defs>
+    <path d="M0 0h300v168H0z" fill="url(#sky)"/><circle cx="241" cy="34" r="17" fill="#F5B93F"/><path d="M0 105 39 72l33 31 35-52 48 56 38-38 48 40 24-27 35 32v54H0Z" fill="#1F6678" opacity=".55"/>
+    <g class="city-silhouette" fill="#8C9BE8"><path d="M13 103h30v55H13zm36-25h33v80H49zm39 16h27v64H88zm36-35h36v99h-36zm42 40h26v59h-26zm32-15h30v74h-30zm36 21h29v53h-29zm36-10h20v63h-20zm27 14h21v49h-21z"/></g>
+    <g class="city-windows" fill="#F5B93F"><path d="M57 88h6v7h-6zm13 0h6v7h-6zm-13 14h6v7h-6zm13 0h6v7h-6zm-13 14h6v7h-6zm13 0h6v7h-6zm70-29h6v7h-6zm13 0h6v7h-6zm-13 14h6v7h-6zm13 0h6v7h-6zm-13 15h6v7h-6zm48-3h6v7h-6zm14 0h6v7h-6z"/></g>
+    <path d="M0 148q39-13 76 0t75 0 75 0 74 0v20H0Z" fill="#1F6678"/><g class="city-green"><path d="M8 135c-2-11 4-17 11-19-1 11-4 16-11 19Zm0 0c0-9-4-13-10-15 0 8 3 13 10 15Zm22 5c-1-12 5-18 12-19-1 11-5 16-12 19Zm0 0c0-9-4-13-10-15 0 8 3 13 10 15Z" fill="#6EDDA6"/><path d="M8 134v15m22-10v10" stroke="#F5B93F" stroke-width="1.5"/></g>
     ${feature}
   </svg>`;
 }
